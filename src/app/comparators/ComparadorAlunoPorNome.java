@@ -17,4 +17,10 @@ public class ComparadorAlunoPorNome implements Comparator<Aluno> {
         return o1.getNome().compareTo(o2.getNome());
     }
 
+    /*
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof ComparadorAlunoPorNome;
+    }*/
+
 }
