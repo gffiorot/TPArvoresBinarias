@@ -9,7 +9,7 @@ import java.util.Comparator;
 
 /**
  *
- * @author victoriocarvalho
+ * @author GustavoFirme
  */
 public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
@@ -37,31 +37,26 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
     @Override
     public void adicionar(T novoValor) {
-        if (raiz == null) {
-            raiz = new No(novoValor);
-            return;
-        }
-        No aux = raiz; //Usado para percorrer e simbolizar onde o novo nó vai ficar
-        No pai = null; //Usado para apontar onde o novo nó vai estar
+        raiz = addRecursivo(raiz,novoValor);
+    }
 
-        while (aux != null) {
-            pai = aux;
-            if (comp.compare(novoValor, aux.valor) < 0) {
-                aux = aux.filhoEsquerdo;
-            }
-            else if (comp.compare(novoValor, aux.valor) > 0) {
-                aux = aux.filhoDireito;
-            }
-            else {
-                System.out.println("Esse valor já está na arvore!\n");
-                return;
-            }
-        }
-        if (comp.compare(novoValor, pai.valor) < 0) {
-            pai.filhoEsquerdo = new No(novoValor);
+    private No addRecursivo(No atual, T novoValor){
+        if (atual==null)
+            return (new No(novoValor));
+
+        int cmp = comp.compare(novoValor,atual.valor);
+
+        if (cmp < 0) {
+            atual.filhoEsquerdo = addRecursivo(atual.filhoEsquerdo,novoValor);
+        } else if (cmp > 0) {
+            atual.filhoDireito = addRecursivo(atual.filhoDireito,novoValor);
         } else {
-            pai.filhoDireito = new No(novoValor);
+            System.out.println("Esse valor já está na arvore!\n");
+            return atual;
         }
+
+
+        return atual;
     }
 
     /**
@@ -89,6 +84,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
     @Override
     public T pesquisar(T valor, Comparator comparador) {
         No result = null;
+
         if (comparador.getClass() != comp.getClass()) {
             result = pesqPercorre(this.raiz,valor,comparador);
         }
@@ -96,7 +92,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
             result = pesqBinaria(this.raiz,valor);
 
         }
-        if (result == null)
+        if (result == null) // não encontrou
             return null;
         return result.valor;
     }
@@ -171,14 +167,17 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
         } else {
             valorRemovido = valor; // Ao encontrar o valor salva ele numa
 
+            //Caso não tenha nenhum filho
             if (atual.filhoEsquerdo == null && atual.filhoDireito == null) {
-                return null;                 //Caso não tenha nenhum filho
+                return null;
             }
 
-            if (atual.filhoEsquerdo == null) //Caso tenha 1 filho a direita
+            //Caso tenha 1 filho a direita
+            if (atual.filhoEsquerdo == null)
                 return atual.filhoDireito;
 
-            if (atual.filhoDireito == null) //Caso tenha 1 filho a esquerda
+            //Caso tenha 1 filho a esquerda
+            if (atual.filhoDireito == null)
                 return atual.filhoEsquerdo;
 
             // 2 filhos
