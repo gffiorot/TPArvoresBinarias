@@ -6,7 +6,8 @@
 package lib;
 
 import java.util.Comparator;
-
+import java.util.LinkedList;
+import java.util.Queue;
 /**
  *
  * @author GustavoFirme
@@ -165,7 +166,8 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
         } else if (cmp > 0) {
             atual.filhoDireito = removerRecursivo(atual.filhoDireito,valor);
         } else {
-            valorRemovido = valor; // Ao encontrar o valor salva ele numa
+            // Ao encontrar o valor salva ele numa variavel local para não dar erro no caso de 2 filhos
+            T valorAuxRemovido = atual.valor;
 
             //Caso não tenha nenhum filho
             if (atual.filhoEsquerdo == null && atual.filhoDireito == null) {
@@ -184,6 +186,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
             No sucessor = encontrarMaior(atual.filhoEsquerdo); //Encontra o nó sucessor pelo método de achar o maior nó da subarvore a esquerda
             atual.valor = sucessor.valor;                      // Passa o nó sucessor ao local do nó removido
             atual.filhoEsquerdo = removerRecursivo(atual.filhoEsquerdo,sucessor.valor); // Remove o nó sucessor do local anterior
+            valorRemovido = valorAuxRemovido; // Só depois do sucessor tomar o lugar muda a variavel global
         }
 
         return atual;
@@ -203,26 +206,88 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
         return atual;
     }
 
-
     @Override
     public int altura() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return alturaRecursivo(raiz)-1; //De acordo com o IArvoreBinaria a raiz não conta para a altura
+    }
+
+    private int alturaRecursivo(No atual) {
+        if (atual == null)
+            return 0;
+
+        int alturaEsquerda = alturaRecursivo(atual.filhoEsquerdo);
+        int alturaDireita = alturaRecursivo(atual.filhoDireito);
+
+        return 1+Math.max(alturaEsquerda, alturaDireita); //Math.max retorna o maior dos dois lados
     }
 
 
     @Override
     public int quantidadeNos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // só precisa devolver o total de nós, não especifica que a raiz não conta
+        return quantNoRecursivo(raiz);
+    }
+
+    private int quantNoRecursivo(No atual) {
+        if (atual == null)
+            return 0;
+
+        int alturaEsquerda = quantNoRecursivo(atual.filhoEsquerdo);
+        int alturaDireita = quantNoRecursivo(atual.filhoDireito);
+
+        return 1+alturaEsquerda+alturaDireita; // única diferença do metodo altura
     }
 
     @Override
     public String caminharEmNivel() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.    
+        if (raiz == null)
+            return "[]";
+
+        String caminho = "[";
+        Queue<No> fila = new LinkedList<>();
+        fila.add(raiz);
+
+        int nivel = 0;
+
+        while (!fila.isEmpty()) {
+            int tamanhoNivel = fila.size();
+            caminho += "Nível " + nivel++ + ": ";
+
+            for (int i = 0; i < tamanhoNivel; i++) {
+                No atual = fila.remove();
+                caminho += atual.valor.toString()+" ";
+
+                if (atual.filhoEsquerdo != null)
+                    fila.add(atual.filhoEsquerdo);
+                if (atual.filhoDireito != null)
+                    fila.add(atual.filhoDireito);
+            }
+
+            if (!fila.isEmpty())
+                caminho += "\n";
+        }
+
+        return caminho+"]";
+
     }
+
 
     @Override
     public String caminharEmOrdem() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.    
+        String caminho = camOrdemRecursivo("[",raiz);
+        return caminho+"]";
+        }
+
+    private String camOrdemRecursivo(String caminho,No atual) {
+        if (atual == null)
+            return caminho;
+
+        caminho = camOrdemRecursivo(caminho,atual.filhoEsquerdo);
+        caminho = caminho+atual.valor.toString()+"\n"; // No meio salve em ordem
+        caminho = camOrdemRecursivo(caminho,atual.filhoDireito);
+
+        return caminho;
     }
+
 
 }

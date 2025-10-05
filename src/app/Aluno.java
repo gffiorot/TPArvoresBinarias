@@ -17,6 +17,10 @@ public class Aluno  {
         this.nome = nome;
     }
 
+    public String toString(){ //Utilizado no caminhamento das arvores
+        return nome+" (" + matricula + ")";
+    }
+
 
     public int getMatricula() {
         return matricula;
