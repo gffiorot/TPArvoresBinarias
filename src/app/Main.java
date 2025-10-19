@@ -3,8 +3,10 @@ package app;
 import app.comparators.*;
 import lib.ArvoreBinaria;
 import java.util.Comparator;
+import java.util.Scanner;
 
 public class Main {
+    Scanner input = new Scanner(System.in);
     public static void main(String[] args) {
 
         // Criando comparadores
@@ -87,5 +89,89 @@ public class Main {
         // Altura e quantidade de nós após remoção
         System.out.println("\nAltura da árvore: " + arvore.altura());
         System.out.println("Quantidade de nós: " + arvore.quantidadeNos());
+
+        Main menu2 = new Main();
+        boolean roda = true;
+        while (roda){
+            int opcao = menu2.menu();
+            if (opcao == 1){
+                Aluno a = menu2.prepararadd();
+                arvore.adicionar(a);
+                System.out.println("Aluno adicionado , mat :"+ a.getMatricula() + " nome :  " + a.getNome());
+            }else if (opcao == 2){
+                String msg = "digite a matricula que quer buscar";
+                int valor = menu2.lerInt(msg);
+                Aluno pesquisado = new Aluno(valor,"");
+                Aluno k = arvore.pesquisar(pesquisado);
+                System.out.println(k.getNome());
+
+            }
+             else if (opcao == 3){
+                String msg = "digite o nome do aluno que quer buscar";
+                String valor = menu2.lerLinha(msg);
+                Aluno pesquisado = new Aluno(-1,valor);
+
+                Aluno k = arvore.pesquisar(pesquisado,compNome);
+                System.out.println(k.getMatricula());
+
+            }
+            else if (opcao == 4 ){
+                String msg = "digite a matricula que quer remover ";
+                int valor = menu2.lerInt(msg);
+                Aluno pesquisado = new Aluno(valor,"");
+                pesquisado = arvore.pesquisar(pesquisado);
+                Aluno k = arvore.remover(pesquisado);
+                System.out.println("removido" + pesquisado.getMatricula() + "\n" +  "nome" + pesquisado.getNome());
+
+            }
+            else if (opcao ==5 ){
+               System.out.println(  arvore.caminharEmOrdem());
+            }
+            else if (opcao == 0) {
+                System.out.println("saindo");
+                roda = false;
+                
+            }else {System.out.println( "erro , tente novamente");}
+        }
+
+
+
+        
+    }
+    int menu() {
+        String msg = "*********************\n" +
+                "Escolha uma opção\n" +
+                "1)  public void adicionar(T novoValor)\n" +
+                "2) public T pesquisar(T valor)\n" +
+                "3) public T pesquisar(T valor, Comparator comparador)\n" +
+                "4)public T remover(T valor)\n"+
+                "5) public String caminharEmOrdem\n"+
+                "0) Sair\n";
+
+        int opcao = lerInt(msg);
+
+
+        return  opcao;
+    }
+
+    private  int lerInt(String msg) {
+        String linha = lerLinha(msg);
+        return Integer.parseInt(linha);
+    }
+
+    private  String lerLinha(String msg) {
+        System.out.println(msg);
+        return input.nextLine();
+    }
+    private Aluno prepararadd(){
+
+            Aluno alunonovo = new Aluno(0 , "teste");
+            String msg = "digite a matricula ";
+            int matriculanova = lerInt(msg) ;
+            msg = "digite o nome ";
+            String nomenovo = lerLinha(msg) ;
+            alunonovo.setMatricula(matriculanova);
+            alunonovo.setNome(nomenovo);
+            return  alunonovo;
     }
 }
