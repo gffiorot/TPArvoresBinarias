@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import java.util.Comparator;
 
-public class Menu { int  menu(ArvoreBinaria<Aluno> arvore) {
+public class Menu { void  menu(ArvoreBinaria<Aluno> arvore) {
     Scanner input = new Scanner(System.in);
     Comparator<Aluno> compMatricula = new ComparadorAlunoPorMatricula();
     Comparator<Aluno> compNome = new ComparadorAlunoPorNome();
@@ -100,3 +100,4 @@ public class Menu { int  menu(ArvoreBinaria<Aluno> arvore) {
         return  alunonovo;
     }
 }
+
