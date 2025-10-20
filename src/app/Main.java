@@ -90,72 +90,140 @@ public class Main {
         System.out.println("\nAltura da árvore: " + arvore.altura());
         System.out.println("Quantidade de nós: " + arvore.quantidadeNos());
 
-        Main menu2 = new Main();
+        Menu menu = new Menu();
+        menu.menu(arvore);
+/*
         boolean roda = true;
         while (roda){
             int opcao = menu2.menu();
-            if (opcao == 1){
+            switch (opcao){
+                case 1:{
                 Aluno a = menu2.prepararadd();
                 arvore.adicionar(a);
                 System.out.println("Aluno adicionado , mat :"+ a.getMatricula() + " nome :  " + a.getNome());
-            }else if (opcao == 2){
-                String msg = "digite a matricula que quer buscar";
-                int valor = menu2.lerInt(msg);
-                Aluno pesquisado = new Aluno(valor,"");
-                Aluno k = arvore.pesquisar(pesquisado);
-                System.out.println(k.getNome());
+                break;
+            } case 2:{
 
-            }
-             else if (opcao == 3){
-                String msg = "digite o nome do aluno que quer buscar";
+                String msg = "como vc quer buscar o aluno \n (1)Matricula? \n (2)Nome "; //1 == matricula, 2 == nome
+                int valor1 = menu2.lerInt(msg);
+                if (valor1 == 1){
+                    msg = "digite a matricula que quer buscar";
+                    int valor = menu2.lerInt(msg);
+                    Aluno pesquisado = new Aluno(valor,"");
+                    Aluno k = arvore.pesquisar(pesquisado);
+                    System.out.println(k.getNome());
+
+                    }
+                else if (valor1 == 2){
+                msg = "digite o nome do aluno que quer buscar";
                 String valor = menu2.lerLinha(msg);
                 Aluno pesquisado = new Aluno(-1,valor);
 
                 Aluno k = arvore.pesquisar(pesquisado,compNome);
-                System.out.println(k.getMatricula());
+                System.out.println(k.getMatricula());}
 
+                break;
             }
-            else if (opcao == 4 ){
+                case 3: {
                 String msg = "digite a matricula que quer remover ";
                 int valor = menu2.lerInt(msg);
                 Aluno pesquisado = new Aluno(valor,"");
                 pesquisado = arvore.pesquisar(pesquisado);
                 Aluno k = arvore.remover(pesquisado);
-                System.out.println("removido" + pesquisado.getMatricula() + "\n" +  "nome" + pesquisado.getNome());
-
+                System.out.println("Matricula removida: " + pesquisado.getMatricula() + "\n" +  "Nome removido " + pesquisado.getNome());
+                break;
             }
-            else if (opcao ==5 ){
+                case 4:{
                System.out.println(  arvore.caminharEmOrdem());
+               break;
             }
-            else if (opcao == 0) {
+                case 0: {
                 System.out.println("saindo");
                 roda = false;
+                break;
                 
-            }else {System.out.println( "erro , tente novamente");}
+            } default:
+                    System.out.println("Opção inválida.");
+        }
         }
 
-
+ */
 
         
-    }
-    int menu() {
-        String msg = "*********************\n" +
-                "Escolha uma opção\n" +
-                "1)  public void adicionar(T novoValor)\n" +
-                "2) public T pesquisar(T valor)\n" +
-                "3) public T pesquisar(T valor, Comparator comparador)\n" +
-                "4)public T remover(T valor)\n"+
-                "5) public String caminharEmOrdem\n"+
-                "0) Sair\n";
-
-        int opcao = lerInt(msg);
+    }/*
+    int  menu(ArvoreBinaria<Aluno> arvore) {
+        Comparator<Aluno> compMatricula = new ComparadorAlunoPorMatricula();
+        Comparator<Aluno> compNome = new ComparadorAlunoPorNome();
 
 
-        return  opcao;
+        int opcao;
+
+        boolean roda = true;
+        while (roda){
+            String msg = "*********************\n" +
+                    "Escolha uma opção\n" +
+                    "1) Adicionar Novo Aluno\n" +
+                    "2) Pesquisar Aluno\n" +
+                    "3) Remover Aluno\n"+
+                    "4) Imprimir a Arvore\n"+
+                    "0) Sair\n";
+            opcao = lerInt(msg);
+            switch (opcao){
+                case 1:{
+                    Aluno a = this.prepararadd();
+                    arvore.adicionar(a);
+                    System.out.println("Aluno adicionado , mat :"+ a.getMatricula() + " nome :  " + a.getNome());
+                    break;
+                } case 2:{
+
+                    msg = "como vc quer buscar o aluno \n (1)Matricula? \n (2)Nome "; //1 == matricula, 2 == nome
+                    int valor1 = this.lerInt(msg);
+                    if (valor1 == 1){
+                        msg = "digite a matricula que quer buscar";
+                        int valor = this.lerInt(msg);
+                        Aluno pesquisado = new Aluno(valor,"");
+                        Aluno k = arvore.pesquisar(pesquisado);
+                        System.out.println(k.getNome());
+
+                    }
+                    else if (valor1 == 2){
+                        msg = "digite o nome do aluno que quer buscar";
+                        String valor = this.lerLinha(msg);
+                        Aluno pesquisado = new Aluno(-1,valor);
+
+                        Aluno k = arvore.pesquisar(pesquisado,compNome);
+                        System.out.println(k.getMatricula());}
+
+                    break;
+                }
+                case 3: {
+                     msg = "digite a matricula que quer remover ";
+                    int valor = this.lerInt(msg);
+                    Aluno pesquisado = new Aluno(valor,"");
+                    pesquisado = arvore.pesquisar(pesquisado);
+                    Aluno k = arvore.remover(pesquisado);
+                    System.out.println("Matricula removida: " + pesquisado.getMatricula() + "\n" +  "Nome removido " + pesquisado.getNome());
+                    break;
+                }
+                case 4:{
+                    System.out.println(  arvore.caminharEmOrdem());
+                    break;
+                }
+                case 0: {
+                    System.out.println("saindo");
+                    roda = false;
+                    break;
+
+                } default:
+                    System.out.println("Opção inválida.");
+            }
+        }
+        return 0;
     }
 
     private  int lerInt(String msg) {
         String linha = lerLinha(msg);
+
         return Integer.parseInt(linha);
     }
 
@@ -165,13 +233,12 @@ public class Main {
     }
     private Aluno prepararadd(){
 
-            Aluno alunonovo = new Aluno(0 , "teste");
+
             String msg = "digite a matricula ";
             int matriculanova = lerInt(msg) ;
             msg = "digite o nome ";
             String nomenovo = lerLinha(msg) ;
-            alunonovo.setMatricula(matriculanova);
-            alunonovo.setNome(nomenovo);
+            Aluno alunonovo = new Aluno(matriculanova , nomenovo);
             return  alunonovo;
-    }
+    }*/
 }
