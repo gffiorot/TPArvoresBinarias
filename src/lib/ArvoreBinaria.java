@@ -51,9 +51,6 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
             atual.filhoEsquerdo = addRecursivo(atual.filhoEsquerdo,novoValor);
         } else if (cmp > 0) {
             atual.filhoDireito = addRecursivo(atual.filhoDireito,novoValor);
-        } else {
-            System.out.println("Esse valor já está na arvore!\n");
-            return atual;
         }
 
 
@@ -175,12 +172,16 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
             }
 
             //Caso tenha 1 filho a direita
-            if (atual.filhoEsquerdo == null)
+            if (atual.filhoEsquerdo == null){
+                valorRemovido = valorAuxRemovido;
                 return atual.filhoDireito;
+            }
 
             //Caso tenha 1 filho a esquerda
-            if (atual.filhoDireito == null)
+            if (atual.filhoDireito == null){
+                valorRemovido = valorAuxRemovido;
                 return atual.filhoEsquerdo;
+            }
 
             // 2 filhos
             No sucessor = encontrarMaior(atual.filhoEsquerdo); //Encontra o nó sucessor pelo método de achar o maior nó da subarvore a esquerda
