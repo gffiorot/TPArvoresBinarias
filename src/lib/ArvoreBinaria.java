@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 /**
  *
- * @author GustavoFirme
+ * @author Gustavo Firme, Rafael Deps, David de Assis
  */
 public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
@@ -59,7 +59,6 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
     /**
      *
-     * @author GustavoFirme
      *
      * Método de pesquisa utilizando o comparator da lista
      * Retorna Null se não achar
@@ -74,7 +73,6 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
     /**
      *
-     * @author GustavoFirme
      *
      * Método de pesquisa utilizando um comparator específico
      * Retorna Null se não achar
@@ -97,7 +95,6 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
     /**
      *
-     * @author GustavoFirme
      *
      * Método auxiliar para o caso de pesquisar a lista com o comparator correto
      */
@@ -118,7 +115,6 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
     /**
      *
-     * @author GustavoFirme
      *
      * Método auxiliar para o caso de pesquisar a lista com o comparator errado
      */
@@ -168,6 +164,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
             //Caso não tenha nenhum filho
             if (atual.filhoEsquerdo == null && atual.filhoDireito == null) {
+                valorRemovido = valorAuxRemovido;
                 return null;
             }
 

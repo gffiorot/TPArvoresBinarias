@@ -19,8 +19,9 @@ public class Menu {
                     "1) Adicionar Novo Aluno\n" +
                     "2) Pesquisar Aluno\n" +
                     "3) Remover Aluno\n"+
-                    "4) Imprimir a Arvore\n"+
-                    "0) Sair\n";
+                    "4) Imprimir a Arvore em ordem\n"+
+                    "5) Imprimir a Arvore em nível\n"+
+                    "0) Sair";
             opcao = lerInt(msg);
             switch (opcao){
                 case 1:{
@@ -36,7 +37,7 @@ public class Menu {
                     break;
                 } case 2:{
 
-                    msg = "como vc quer buscar o aluno \n (1)Matricula? \n (2)Nome "; //1 == matricula, 2 == nome
+                    msg = "como vc quer buscar o aluno? \n (1)Matricula \n (2)Nome "; //1 == matricula, 2 == nome
                     int valor1 = this.lerInt(msg);
                     if (valor1 == 1){
                         msg = "digite a matricula que quer buscar";
@@ -84,6 +85,10 @@ public class Menu {
                 }
                 case 4:{
                     System.out.println(  arvore.caminharEmOrdem());
+                    break;
+                }
+                case 5:{
+                    System.out.println(arvore.caminharEmNivel());
                     break;
                 }
                 case 0: {
