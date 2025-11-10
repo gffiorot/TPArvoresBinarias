@@ -14,21 +14,7 @@ import java.util.Queue;
  */
 public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
 
-    private class No{
-        private T valor;
-        private No filhoEsquerdo;
-        private No filhoDireito;
-
-        private No(T valor) {
-            this.valor = valor;
-            this.filhoEsquerdo = null;
-            this.filhoDireito = null;
-        }
-
-
-    }
-
-    protected No raiz = null;
+    protected No<T> raiz = null;
     protected Comparator<T> comp;
 
     public ArvoreBinaria(Comparator<T> comp) {
@@ -41,16 +27,16 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
         raiz = addRecursivo(raiz,novoValor);
     }
 
-    private No addRecursivo(No atual, T novoValor){
+    protected No<T> addRecursivo(No<T> atual, T novoValor){
         if (atual==null)
-            return (new No(novoValor));
+            return (new No<T>(novoValor));
 
-        int cmp = comp.compare(novoValor,atual.valor);
+        int cmp = comp.compare(novoValor, atual.getValor());
 
         if (cmp < 0) {
-            atual.filhoEsquerdo = addRecursivo(atual.filhoEsquerdo,novoValor);
+            atual.setFilhoEsquerdo(addRecursivo(atual.getFilhoEsquerdo(),novoValor));
         } else if (cmp > 0) {
-            atual.filhoDireito = addRecursivo(atual.filhoDireito,novoValor);
+            atual.setFilhoDireito(addRecursivo(atual.getFilhoDireito(),novoValor));
         }
 
 
@@ -65,10 +51,10 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
      */
     @Override
     public T pesquisar(T valor) {
-        No result = pesqBinaria(raiz,valor);
+        No<T> result = pesqBinaria(raiz,valor);
         if (result == null)
             return null;
-        return (result.valor);
+        return (result.getValor());
     }
 
     /**
@@ -79,7 +65,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
      */
     @Override
     public T pesquisar(T valor, Comparator comparador) {
-        No result = null;
+        No<T> result = null;
 
         if (comparador.getClass() != comp.getClass()) {
             result = pesqPercorre(this.raiz,valor,comparador);
@@ -90,7 +76,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
         }
         if (result == null) // não encontrou
             return null;
-        return result.valor;
+        return result.getValor();
     }
 
     /**
@@ -98,13 +84,13 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
      *
      * Método auxiliar para o caso de pesquisar a lista com o comparator correto
      */
-    private No pesqBinaria(No atual,T valor) {
+    private No<T> pesqBinaria(No<T> atual,T valor) {
         while (atual != null) {
-            if (comp.compare(valor, atual.valor) < 0) {
-                atual = atual.filhoEsquerdo;
+            if (comp.compare(valor, atual.getValor()) < 0) {
+                atual = atual.getFilhoEsquerdo();
             }
-            else if (comp.compare(valor, atual.valor) > 0)
-            {atual = atual.filhoDireito;
+            else if (comp.compare(valor, atual.getValor()) > 0)
+            {atual = atual.getFilhoDireito();
             }
             else return atual;
         }
@@ -118,18 +104,18 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
      *
      * Método auxiliar para o caso de pesquisar a lista com o comparator errado
      */
-    private No pesqPercorre(No atual,T valor, Comparator comparador) {
+    private No<T> pesqPercorre(No<T> atual,T valor, Comparator comparador) {
         if (atual == null)
             return null;
 
-        if (comparador.compare(valor, atual.valor) == 0) //Se for o valor procurado retorna o No
+        if (comparador.compare(valor, atual.getValor()) == 0) //Se for o valor procurado retorna o No
             return atual;
 
-        No aux = pesqPercorre(atual.filhoEsquerdo, valor, comparador); //Verifica recursivamente a esquerda
+        No<T> aux = pesqPercorre(atual.getFilhoEsquerdo(), valor, comparador); //Verifica recursivamente a esquerda
         if (aux != null) // Só acontece se o valor for igual ao procurado
             return aux;
 
-        return pesqPercorre(atual.filhoDireito, valor, comparador); //Verifica recursivamente a direita
+        return pesqPercorre(atual.getFilhoDireito(), valor, comparador); //Verifica recursivamente a direita
     }
 
 
@@ -148,42 +134,42 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
      *
      * Método auxiliar do método remover para ser possivel recursão na parte de remover
      */
-    private No removerRecursivo(No atual, T valor) {
+    private No<T> removerRecursivo(No<T> atual, T valor) {
         if (atual == null)
             return null;
 
-        int cmp = comp.compare(valor, atual.valor);
+        int cmp = comp.compare(valor, atual.getValor());
 
         if (cmp < 0) {
-            atual.filhoEsquerdo = removerRecursivo(atual.filhoEsquerdo,valor);
+            atual.setFilhoEsquerdo(removerRecursivo(atual.getFilhoEsquerdo(),valor));
         } else if (cmp > 0) {
-            atual.filhoDireito = removerRecursivo(atual.filhoDireito,valor);
+            atual.setFilhoDireito(removerRecursivo(atual.getFilhoDireito(),valor));
         } else {
             // Ao encontrar o valor salva ele numa variavel local para não dar erro no caso de 2 filhos
-            T valorAuxRemovido = atual.valor;
+            T valorAuxRemovido = atual.getValor();
 
             //Caso não tenha nenhum filho
-            if (atual.filhoEsquerdo == null && atual.filhoDireito == null) {
+            if (atual.getFilhoEsquerdo() == null && atual.getFilhoDireito() == null) {
                 valorRemovido = valorAuxRemovido;
                 return null;
             }
 
             //Caso tenha 1 filho a direita
-            if (atual.filhoEsquerdo == null){
+            if (atual.getFilhoEsquerdo() == null){
                 valorRemovido = valorAuxRemovido;
-                return atual.filhoDireito;
+                return atual.getFilhoDireito();
             }
 
             //Caso tenha 1 filho a esquerda
-            if (atual.filhoDireito == null){
+            if (atual.getFilhoDireito() == null){
                 valorRemovido = valorAuxRemovido;
-                return atual.filhoEsquerdo;
+                return atual.getFilhoEsquerdo();
             }
 
             // 2 filhos
-            No sucessor = encontrarMaior(atual.filhoEsquerdo); //Encontra o nó sucessor pelo método de achar o maior nó da subarvore a esquerda
-            atual.valor = sucessor.valor;                      // Passa o nó sucessor ao local do nó removido
-            atual.filhoEsquerdo = removerRecursivo(atual.filhoEsquerdo,sucessor.valor); // Remove o nó sucessor do local anterior
+            No<T> sucessor = encontrarMaior(atual.getFilhoEsquerdo()); //Encontra o nó sucessor pelo método de achar o maior nó da subarvore a esquerda
+            atual.setValor(sucessor.getValor());                      // Passa o nó sucessor ao local do nó removido
+            atual.setFilhoEsquerdo(removerRecursivo(atual.getFilhoEsquerdo(), sucessor.getValor())); // Remove o nó sucessor do local anterior
             valorRemovido = valorAuxRemovido; // Só depois do sucessor tomar o lugar muda a variavel global
         }
 
@@ -197,9 +183,9 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
      * Método auxiliar do método removerRecursivo para encontrar o
      * nó substitutivo no caso de o removido ter 2 filhos
      */
-    private No encontrarMaior(No atual) {
-        while (atual.filhoDireito != null) {
-            atual = atual.filhoDireito;
+    private No<T> encontrarMaior(No<T> atual) {
+        while (atual.getFilhoDireito() != null) {
+            atual = atual.getFilhoDireito();
         }
         return atual;
     }
@@ -209,12 +195,12 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
         return alturaRecursivo(raiz)-1; //De acordo com o IArvoreBinaria a raiz não conta para a altura
     }
 
-    private int alturaRecursivo(No atual) {
+    protected int alturaRecursivo(No<T> atual) {
         if (atual == null)
             return 0;
 
-        int alturaEsquerda = alturaRecursivo(atual.filhoEsquerdo);
-        int alturaDireita = alturaRecursivo(atual.filhoDireito);
+        int alturaEsquerda = alturaRecursivo(atual.getFilhoEsquerdo());
+        int alturaDireita = alturaRecursivo(atual.getFilhoDireito());
 
         return 1+Math.max(alturaEsquerda, alturaDireita); //Math.max retorna o maior dos dois lados
     }
@@ -226,12 +212,12 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
         return quantNoRecursivo(raiz);
     }
 
-    private int quantNoRecursivo(No atual) {
+    private int quantNoRecursivo(No<T> atual) {
         if (atual == null)
             return 0;
 
-        int alturaEsquerda = quantNoRecursivo(atual.filhoEsquerdo);
-        int alturaDireita = quantNoRecursivo(atual.filhoDireito);
+        int alturaEsquerda = quantNoRecursivo(atual.getFilhoEsquerdo());
+        int alturaDireita = quantNoRecursivo(atual.getFilhoDireito());
 
         return 1+alturaEsquerda+alturaDireita; // única diferença do metodo altura
     }
@@ -242,7 +228,7 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
             return "[]";
 
         String caminho = "[";
-        Queue<No> fila = new LinkedList<>();
+        Queue<No<T>> fila = new LinkedList<>();
         fila.add(raiz);
 
         int nivel = 0;
@@ -252,13 +238,13 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
             caminho += "Nível " + nivel++ + ": ";
 
             for (int i = 0; i < tamanhoNivel; i++) {
-                No atual = fila.remove();
-                caminho += atual.valor.toString()+" ";
+                No<T> atual = fila.remove();
+                caminho += atual.getValor().toString()+" ";
 
-                if (atual.filhoEsquerdo != null)
-                    fila.add(atual.filhoEsquerdo);
-                if (atual.filhoDireito != null)
-                    fila.add(atual.filhoDireito);
+                if (atual.getFilhoEsquerdo() != null)
+                    fila.add(atual.getFilhoEsquerdo());
+                if (atual.getFilhoDireito() != null)
+                    fila.add(atual.getFilhoDireito());
             }
 
             if (!fila.isEmpty())
@@ -276,13 +262,13 @@ public class ArvoreBinaria<T> implements IArvoreBinaria<T> {
         return caminho+"]";
         }
 
-    private String camOrdemRecursivo(String caminho,No atual) {
+    private String camOrdemRecursivo(String caminho,No<T> atual) {
         if (atual == null)
             return caminho;
 
-        caminho = camOrdemRecursivo(caminho,atual.filhoEsquerdo);
-        caminho = caminho+atual.valor.toString()+"\n"; // No meio salve em ordem
-        caminho = camOrdemRecursivo(caminho,atual.filhoDireito);
+        caminho = camOrdemRecursivo(caminho, atual.getFilhoEsquerdo());
+        caminho = caminho+ atual.getValor().toString()+"\n"; // No meio salve em ordem
+        caminho = camOrdemRecursivo(caminho, atual.getFilhoDireito());
 
         return caminho;
     }
